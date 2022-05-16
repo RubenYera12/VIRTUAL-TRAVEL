@@ -2,12 +2,13 @@ package com.Ruben.BackEmpresa.reserva.application;
 
 import com.Ruben.BackEmpresa.bus.domain.Bus;
 import com.Ruben.BackEmpresa.bus.infrastructure.repository.BusRepository;
+import com.Ruben.BackEmpresa.email.application.EmailService;
 import com.Ruben.BackEmpresa.reserva.domain.Reserva;
 import com.Ruben.BackEmpresa.reserva.infrastructure.repository.ReservaRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.lang.management.BufferPoolMXBean;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,37 +17,53 @@ import java.util.Optional;
 public class ReservaServiceImpl implements ReservaService {
     private final ReservaRepository reservaRepository;
     private final BusRepository busRepository;
+    private final EmailService emailService;
 
-    @Override
-    public Reserva addReserva(Reserva reserva) throws Exception {
-        //Comprobamos si existe la Reserva
-        if (reserva.getId() != null) {
-            Optional<Reserva> reservaChecked = reservaRepository.findById(reserva.getId());
-            if (!reservaChecked.isEmpty()) {
-                throw new Exception("Ya existe una reserva con ID: " + reserva.getId());
-            }
-        }
-        return reservaRepository.save(reserva);
-    }
 
     @Override
     public Reserva reservar(Reserva reserva) throws Exception {
-        //Comprobamos si existe la reserva
-        if (reserva.getId() != null) {
-            Optional<Reserva> checkedReserva = reservaRepository.findById(reserva.getId());
-            if (!checkedReserva.isEmpty()) {
-                throw new Exception("Ya existe una reserva con ID: " + reserva.getId());
-            }
-        }
         //Comprobamos que haya plazas en el autobus
-        Optional<Bus> bus = busRepository.findById(reserva.getBus().getId());
-        if (bus.get().getReservas().size() >= bus.get().getCapacidad()) {
+        Bus bus = busRepository.findById(reserva.getBus().getId())
+                .orElseThrow(() -> new Exception("No existe este autobus"));
+        if (!check(bus)) {
             throw new Exception("No hay plazas disponibles en el autobus.");
         }
+        //Comprobamos si el usuario ya ha reservado
+        Optional<Reserva> reserva1 = reservaRepository
+                .findByEmailAndFechaReservaAndHoraReservaAndCiudadDestino(reserva.getEmail(), reserva.getFechaReserva(), reserva.getHoraReserva(), reserva.getCiudadDestino());
+        if (reserva1.isPresent())
+            throw new Exception("Ya has reservado");
         //Realizamos reserva
-        bus.get().getReservas().add(reserva);
+
+        bus.getReservas().add(reserva);
         return reservaRepository.save(reserva);
     }
+
+    @Override
+    public void cancelar(Date fecha, Float hora, String ciudad) throws Exception {
+        Bus bus = busRepository
+                .findByCiudadDestinoAndFechaReservaAndHoraReserva(ciudad, fecha, hora)
+                .orElseThrow(() -> new Exception("No se ha encontrado un autbus con estos requisitos"));
+        for (Reserva reserva : bus.getReservas()) {
+            emailService.emailCancelacion(reserva);
+        }
+
+    }
+
+    @Override
+    public List<Reserva> findReservaByConditions(Date fecha, Float hora, String ciudad) throws Exception {
+        Bus bus = busRepository
+                .findByCiudadDestinoAndFechaReservaAndHoraReserva(ciudad, fecha, hora)
+                .orElseThrow(() -> new Exception("No se ha encontrado un autobus con estos requisitos."));
+        return bus.getReservas();
+    }
+
+    //Comprueba si existen plazas disponibles
+    @Override
+    public boolean check(Bus bus) throws Exception {
+        return bus.getReservas().size() < bus.getCapacidad();
+    }
+
 
     @Override
     public List<Reserva> findAll() {

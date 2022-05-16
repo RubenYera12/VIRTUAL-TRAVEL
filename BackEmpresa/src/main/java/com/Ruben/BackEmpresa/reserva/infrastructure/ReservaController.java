@@ -1,33 +1,42 @@
 package com.Ruben.BackEmpresa.reserva.infrastructure;
 
+import com.Ruben.BackEmpresa.bus.application.BusService;
 import com.Ruben.BackEmpresa.bus.domain.Bus;
-import com.Ruben.BackEmpresa.bus.infrastructure.repository.BusRepository;
+import com.Ruben.BackEmpresa.email.application.EmailService;
 import com.Ruben.BackEmpresa.reserva.application.ReservaService;
 import com.Ruben.BackEmpresa.reserva.domain.Reserva;
 import com.Ruben.BackEmpresa.reserva.infrastructure.dto.InputReservaDTO;
 import com.Ruben.BackEmpresa.reserva.infrastructure.dto.OutputReservaDTO;
+import com.Ruben.BackEmpresa.reserva.infrastructure.dto.ReservaDisponibleOutputDTO;
 import lombok.AllArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api/Empresa/Reserva")
 @AllArgsConstructor
 public class ReservaController {
     private final ReservaService reservaService;
-    private final BusRepository busRepository;
-
-    @PostMapping("addReserva")
-    public OutputReservaDTO addReserva(@RequestBody InputReservaDTO inputReservaDTO) throws Exception {
-        return new OutputReservaDTO(reservaService.addReserva(new Reserva(inputReservaDTO)));
-    }
+    private final BusService busService;
+    private final EmailService emailService;
 
     @PostMapping("reserva")
-    public OutputReservaDTO reserar(@RequestBody InputReservaDTO inputReservaDTO) throws Exception {
-        return new OutputReservaDTO(reservaService.reservar(new Reserva(inputReservaDTO)));
+    public OutputReservaDTO reservar(@RequestBody InputReservaDTO inputReservaDTO) throws Exception {
+        Reserva reserva = reservaService.reservar(new Reserva(inputReservaDTO));
+        emailService.emailConfirmacion(reserva);
+        return new OutputReservaDTO(reserva);
+    }
+
+    @DeleteMapping("cancelReserva")
+    public String cancelReserva(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd")Date dia, @RequestParam Float hora, @RequestParam String destino) throws Exception {
+        reservaService.cancelar(dia, hora, destino);
+        //Todo: cancelar la reserva
+        return "Se ha cancelado correctamente.";
     }
 
     @GetMapping("findById/{id}")
@@ -54,4 +63,41 @@ public class ReservaController {
         return reservaService.deleteById(id);
     }
 
+    @GetMapping("findReservasByConditions")
+    public List<OutputReservaDTO> findReservaByConditions(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd")Date dia, @RequestParam Float hora, @RequestParam String destino) throws Exception {
+        //Creamos la lista de condiciones
+        HashMap<String, Object> conditions = new HashMap<>();
+        if (dia == null || hora == null || destino == null) {
+            throw new Exception("Completa los parametros.");
+        }
+//        conditions.put("fechaReserva", dia);
+//        conditions.put("horaReserva", hora);
+//        conditions.put("ciudadDestino", destino);
+
+
+        //Creamos la lista de reservas
+        List<OutputReservaDTO> outputReservaDTOList = new ArrayList<>();
+        for (Reserva reserva : reservaService.findReservaByConditions(dia,hora,destino)) {
+            outputReservaDTOList.add(new OutputReservaDTO(reserva));
+        }
+
+        return outputReservaDTOList;
+    }
+
+    @GetMapping("getNumPlazasByConditions")
+    public ReservaDisponibleOutputDTO getNumPlazasByConditions(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd")Date dia, @RequestParam Float hora, @RequestParam String destino) throws Exception {
+        //Creamos la lista de condiciones
+        HashMap<String, Object> conditions = new HashMap<>();
+        if (dia == null || hora == null || destino == null) {
+            throw new Exception("Completa los parametros.");
+        }
+//        conditions.put("fechaReserva", dia);
+//        conditions.put("horaReserva", hora);
+//        conditions.put("ciudadDestino", destino);
+
+        Bus bus = busService.findBusByConditions(dia, hora, destino);
+
+        return new ReservaDisponibleOutputDTO(bus);
+
+    }
 }

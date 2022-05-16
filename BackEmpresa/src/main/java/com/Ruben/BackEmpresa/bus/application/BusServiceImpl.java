@@ -5,6 +5,7 @@ import com.Ruben.BackEmpresa.bus.infrastructure.repository.BusRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,5 +68,11 @@ public class BusServiceImpl implements BusService {
             bus.setReservas(chekedBus.get().getReservas());
         }
         return busRepository.save(bus);
+    }
+
+    @Override
+    public Bus findBusByConditions(Date fecha, Float hora, String ciudad) throws Exception {
+        return busRepository.
+        findByCiudadDestinoAndFechaReservaAndHoraReserva(ciudad,fecha,hora).orElseThrow(()->new Exception("No se ha encontrado un autobus con estos requisitos."));
     }
 }

@@ -36,6 +36,7 @@ public class Bus {
     @JsonIgnore
     private List<Reserva> reservas;
     private String ciudadDestino;
+    @Temporal(TemporalType.DATE)
     private Date fechaReserva;
     private Float horaReserva;
 

@@ -2,6 +2,8 @@ package com.Ruben.BackEmpresa.bus.application;
 
 import com.Ruben.BackEmpresa.bus.domain.Bus;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public interface BusService {
@@ -10,4 +12,5 @@ public interface BusService {
     Bus findById(String id) throws Exception;
     String deleteById(String id) throws Exception;
     Bus updateBus(Bus bus,String id) throws Exception;
+    Bus findBusByConditions(Date fecha, Float hora, String ciudad) throws Exception;
 }
