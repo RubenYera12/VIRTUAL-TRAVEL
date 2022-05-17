@@ -17,9 +17,10 @@ public class OutputReservaDTO {
     private String nombre;
     private String apellido;
     private String telefono;
-    private String email;
+    private String correo;
     private Date fechaReserva;
     private Float HoraReserva;
+    private String estado;
     private Bus bus;
 
     public OutputReservaDTO(Reserva reserva){
@@ -28,9 +29,10 @@ public class OutputReservaDTO {
         setNombre(reserva.getNombre());
         setApellido(reserva.getApellido());
         setTelefono(reserva.getTelefono());
-        setEmail(reserva.getEmail());
+        setCorreo(reserva.getCorreo());
         setFechaReserva(reserva.getFechaReserva());
         setHoraReserva(reserva.getHoraReserva());
+        setEstado(reserva.getEstado());
         setBus(reserva.getBus());
     }
 }

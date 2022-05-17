@@ -25,22 +25,38 @@ public class EmailServiceImpl implements EmailService{
     public void emailConfirmacion(Reserva reserva) throws UnsupportedEncodingException {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(String.valueOf(new InternetAddress("no_reply@example.com", "Virtual Travel")));
-        message.setTo(reserva.getEmail());
+        message.setTo(reserva.getCorreo());
         message.setSubject("Su reserva ha sido confirmada.");
         String contenido = "Buenas " + reserva.getNombre() + ", le informamos que su viaje con destino " + reserva.getCiudadDestino() + " ha sido confirmado.\n" +
                 "Datos de la reserva:\n" + "Fecha del viaje: " + new Date(reserva.getFechaReserva().getTime()).toLocalDate()
                 .format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + " a las " + String.format("%.2f", reserva.getHoraReserva()) + "\n Un saludo.";
         message.setText(contenido);
         emailSender.send(message);
-        Email email = new Email(reserva.getCiudadDestino(), reserva.getEmail(), reserva.getFechaReserva(), reserva.getHoraReserva());
+        Email email = new Email(reserva.getCiudadDestino(), reserva.getCorreo(), reserva.getFechaReserva(), reserva.getHoraReserva());
         emailRepository.save(email);
     }
 
     @Override
-    public void emailCancelacion(Reserva reserva) throws UnsupportedEncodingException{
+    public void emailCancelacionViaje(Reserva reserva) throws UnsupportedEncodingException{
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(String.valueOf(new InternetAddress("no_reply@example.com", "Virtual Travel")));
-        message.setTo(reserva.getEmail());
+        message.setTo(reserva.getCorreo());
+        message.setSubject("Su viaje ha sido cancelada.");
+        String contenido = "Buenas " + reserva.getNombre() + ", le informamos que su viaje con destino " + reserva.getCiudadDestino() + " ha sido cancelado por motivos internos de la compañia.\n" +
+                "Datos de la reserva:\n" + "Fecha del viaje: " + new Date(reserva.getFechaReserva().getTime()).toLocalDate()
+                .format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + " a las " + String.format("%.2f", reserva.getHoraReserva()) +
+                "\n Un saludo.";
+        message.setText(contenido);
+        emailSender.send(message);
+        Email email = new Email(reserva.getCiudadDestino(), reserva.getCorreo(), reserva.getFechaReserva(), reserva.getHoraReserva());
+        emailRepository.save(email);
+    }
+
+    @Override
+    public void emailCancelacionReserva(Reserva reserva) throws UnsupportedEncodingException{
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(String.valueOf(new InternetAddress("no_reply@example.com", "Virtual Travel")));
+        message.setTo(reserva.getCorreo());
         message.setSubject("Su reserva ha sido cancelada.");
         String contenido = "Buenas " + reserva.getNombre() + ", le informamos que su viaje con destino " + reserva.getCiudadDestino() + " ha sido cancelado.\n" +
                 "Datos de la reserva:\n" + "Fecha del viaje: " + new Date(reserva.getFechaReserva().getTime()).toLocalDate()
@@ -48,7 +64,7 @@ public class EmailServiceImpl implements EmailService{
                 "\n Un saludo.";
         message.setText(contenido);
         emailSender.send(message);
-        Email email = new Email(reserva.getCiudadDestino(), reserva.getEmail(), reserva.getFechaReserva(), reserva.getHoraReserva());
+        Email email = new Email(reserva.getCiudadDestino(), reserva.getCorreo(), reserva.getFechaReserva(), reserva.getHoraReserva());
         emailRepository.save(email);
     }
 

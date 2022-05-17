@@ -10,7 +10,9 @@ public interface EmailService {
 
     void emailConfirmacion(Reserva reserva) throws UnsupportedEncodingException;
 
-    void emailCancelacion(Reserva reserva) throws UnsupportedEncodingException;
+    void emailCancelacionViaje(Reserva reserva) throws UnsupportedEncodingException;
+
+    void emailCancelacionReserva(Reserva reserva) throws UnsupportedEncodingException;
 
     List<Email> findByEmail(String email);
 }

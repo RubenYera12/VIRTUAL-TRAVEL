@@ -19,6 +19,7 @@ public class OutputBusDTO {
     private String ciudadDestino;
     private Date fechaReserva;
     private Float HoraReserva;
+    private String estado = "ACTIVO";
 
     public OutputBusDTO(Bus bus) {
         setId(bus.getId());
@@ -26,5 +27,6 @@ public class OutputBusDTO {
         setCiudadDestino(bus.getCiudadDestino());
         setFechaReserva(bus.getFechaReserva());
         setHoraReserva(bus.getHoraReserva());
+        setEstado(bus.getEstado());
     }
 }

@@ -27,16 +27,19 @@ public class ReservaController {
 
     @PostMapping("reserva")
     public OutputReservaDTO reservar(@RequestBody InputReservaDTO inputReservaDTO) throws Exception {
-        Reserva reserva = reservaService.reservar(new Reserva(inputReservaDTO));
-        emailService.emailConfirmacion(reserva);
-        return new OutputReservaDTO(reserva);
+        return new OutputReservaDTO(reservaService.reservar(new Reserva(inputReservaDTO)));
     }
 
-    @DeleteMapping("cancelReserva")
-    public String cancelReserva(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd")Date dia, @RequestParam Float hora, @RequestParam String destino) throws Exception {
-        reservaService.cancelar(dia, hora, destino);
-        //Todo: cancelar la reserva
-        return "Se ha cancelado correctamente.";
+    @PutMapping("cancel/Trip")
+    public String cancelTrip(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd")Date dia, @RequestParam Float hora, @RequestParam String destino) throws Exception {
+        reservaService.cancelAllReservas(dia, hora, destino);
+        return "Se ha cancelado el viaje correctamente.";
+    }
+
+    @PutMapping("cancel/Reserva/{id}")
+    public String cancelReserva(@PathVariable String id) throws Exception {
+        reservaService.cancelReservaById(id);
+        return "Se ha cancelado la reserva correctamente";
     }
 
     @GetMapping("findById/{id}")

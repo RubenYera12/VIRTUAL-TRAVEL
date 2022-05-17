@@ -18,9 +18,9 @@ import java.util.Date;
 @NoArgsConstructor
 public class Reserva {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reservaSeq")
     @GenericGenerator(
-            name = "seq",
+            name = "reservaSeq",
             strategy = "com.Ruben.BackEmpresa.StringPrefixedSequenceIdGenerator",
             parameters = {
                     @org.hibernate.annotations.Parameter(name = StringPrefixedSequenceIdGenerator.INCREMENT_PARAM, value = "1"),
@@ -32,9 +32,10 @@ public class Reserva {
     private String nombre;
     private String apellido;
     private String telefono;
-    private String email;
+    private String correo;
     private Date fechaReserva;
     private Float horaReserva;
+    private String estado;
     @ManyToOne
     @JsonIgnore
     private Bus bus;
@@ -45,9 +46,10 @@ public class Reserva {
         setNombre(inputReservaDTO.getNombre());
         setApellido(inputReservaDTO.getApellido());
         setTelefono(inputReservaDTO.getTelefono());
-        setEmail(inputReservaDTO.getEmail());
+        setCorreo(inputReservaDTO.getCorreo());
         setFechaReserva(inputReservaDTO.getFechaReserva());
         setHoraReserva(inputReservaDTO.getHoraReserva());
+        setEstado(inputReservaDTO.getEstado());
         setBus(inputReservaDTO.getBus());
     }
 }

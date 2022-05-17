@@ -22,9 +22,9 @@ import java.util.Date;
 public class Email {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "EmailSeq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "emailSeq")
     @GenericGenerator(
-            name = "EmailSeq",
+            name = "emailSeq",
             strategy = "com.Ruben.BackEmpresa.StringPrefixedSequenceIdGenerator",
             parameters = {
                     @Parameter(name = StringPrefixedSequenceIdGenerator.INCREMENT_PARAM, value = "1"),

@@ -21,9 +21,9 @@ import java.util.List;
 public class Bus {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "busSeq")
     @GenericGenerator(
-            name = "seq",
+            name = "busSeq",
             strategy = "com.Ruben.BackEmpresa.StringPrefixedSequenceIdGenerator",
             parameters = {
                     @Parameter(name = StringPrefixedSequenceIdGenerator.INCREMENT_PARAM, value = "1"),
@@ -39,6 +39,7 @@ public class Bus {
     @Temporal(TemporalType.DATE)
     private Date fechaReserva;
     private Float horaReserva;
+    private String estado = "ACTIVO";
 
     public Bus(InputBusDTO inputBusDTO){
         setId(inputBusDTO.getId());
@@ -46,5 +47,6 @@ public class Bus {
         setCiudadDestino(inputBusDTO.getCiudadDestino());
         setFechaReserva(inputBusDTO.getFechaReserva());
         setHoraReserva(inputBusDTO.getHoraReserva());
+        setEstado(inputBusDTO.getEstado());
     }
 }

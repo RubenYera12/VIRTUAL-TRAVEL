@@ -18,4 +18,5 @@ public class InputBusDTO {
     private String ciudadDestino;
     private Date fechaReserva;
     private Float HoraReserva;
+    private String estado = "ACTIVO";
 }

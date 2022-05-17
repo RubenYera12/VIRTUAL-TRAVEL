@@ -4,7 +4,6 @@ import com.Ruben.BackEmpresa.bus.domain.Bus;
 import com.Ruben.BackEmpresa.reserva.domain.Reserva;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 public interface ReservaService {
@@ -13,11 +12,13 @@ public interface ReservaService {
     String deleteById(String id) throws Exception;
     Reserva updateReserva(Reserva reserva,String id) throws Exception;
 
-    void cancelar(Date fecha, Float hora, String ciudad) throws Exception;
+    void cancelAllReservas(Date fecha, Float hora, String ciudad) throws Exception;
+
+    void cancelReservaById(String id_reserva) throws Exception;
 
     List<Reserva> findReservaByConditions(Date fecha, Float hora, String ciudad) throws Exception;
 
-    boolean check(Bus bus) throws Exception;
+    boolean checkPlazas(Bus bus) throws Exception;
 
     Reserva reservar(Reserva reserva) throws Exception;
 }

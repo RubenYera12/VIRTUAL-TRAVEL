@@ -16,8 +16,9 @@ public class InputReservaDTO {
     private String nombre;
     private String apellido;
     private String telefono;
-    private String email;
+    private String correo;
     private Date fechaReserva;
     private Float HoraReserva;
+    private String estado;
     private Bus bus;
 }
