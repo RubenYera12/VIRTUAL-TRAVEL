@@ -2,7 +2,8 @@ package com.Ruben.BackEmpresa.bus.application;
 
 import com.Ruben.BackEmpresa.bus.domain.Bus;
 import com.Ruben.BackEmpresa.bus.infrastructure.repository.BusRepository;
-import lombok.AllArgsConstructor;
+import com.Ruben.BackEmpresa.shared.kafka.Producer.KafkaSender;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -10,9 +11,23 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+
 public class BusServiceImpl implements BusService {
     private final BusRepository busRepository;
+    private KafkaSender kafkaSender;
+
+    @Value("${server.port}")
+    private String port;
+
+    @Value("${topic}")
+    private String topic;
+
+    private final String CLASE = "BUS";
+
+    public BusServiceImpl(BusRepository busRepository, KafkaSender kafkaSender) {
+        this.busRepository = busRepository;
+        this.kafkaSender = kafkaSender;
+    }
 
     @Override
     public Bus addBus(Bus bus) throws Exception {
@@ -23,6 +38,7 @@ public class BusServiceImpl implements BusService {
                 throw new Exception("Ya existe un Autobus con ID: " + bus.getId());
             }
         }
+        kafkaSender.sendMessage(topic,bus,port,"crearBus",CLASE);
         return busRepository.saveAndFlush(bus);
     }
 
@@ -74,5 +90,10 @@ public class BusServiceImpl implements BusService {
     public Bus findBusByConditions(Date fecha, Float hora, String ciudad) throws Exception {
         return busRepository.
         findByCiudadDestinoAndFechaReservaAndHoraReserva(ciudad,fecha,hora).orElseThrow(()->new Exception("No se ha encontrado un autobus con estos requisitos."));
+    }
+
+    @Override
+    public void listenTopic(String s, Bus readValue) {
+
     }
 }

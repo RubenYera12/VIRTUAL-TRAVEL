@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/Empresa/Bus")
+@RequestMapping("/api/v0/Bus")
 @AllArgsConstructor
 public class BusController {
     private final BusService busService;

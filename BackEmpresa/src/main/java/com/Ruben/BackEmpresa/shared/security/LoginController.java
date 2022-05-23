@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
@@ -24,9 +24,9 @@ public class LoginController {
 
     @GetMapping("login")
     public ResponseEntity<String> login(
-            @RequestParam("correo") String correo, @RequestParam("password") String pwd)
+            @RequestHeader("correo") String correo, @RequestHeader("password") String pwd)
             throws Exception {
-        User user = userService.findByCorreo(correo).orElseThrow(()->new Exception("Usuario " + correo + " no encontrado"));
+        User user = userService.findByCorreo(correo);
         String password = user.getPassword();
 
         if (!pwd.equals(password)) throw new Exception("Password erroneo");

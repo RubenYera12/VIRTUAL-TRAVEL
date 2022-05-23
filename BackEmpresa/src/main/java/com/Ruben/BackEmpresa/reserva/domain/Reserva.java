@@ -3,7 +3,7 @@ package com.Ruben.BackEmpresa.reserva.domain;
 import com.Ruben.BackEmpresa.StringPrefixedSequenceIdGenerator;
 import com.Ruben.BackEmpresa.bus.domain.Bus;
 import com.Ruben.BackEmpresa.reserva.infrastructure.dto.InputReservaDTO;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -37,7 +37,7 @@ public class Reserva {
     private Float horaReserva;
     private String estado;
     @ManyToOne
-    @JsonIgnore
+    @JsonBackReference
     private Bus bus;
 
     public Reserva(InputReservaDTO inputReservaDTO){

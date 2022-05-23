@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
 public class InputBusDTO {
     private String id;
     private final int capacidad = 40;
-    private List<Reserva> reservas;
+    private List<Reserva> reservas=new ArrayList<>();
     private String ciudadDestino;
     private Date fechaReserva;
     private Float HoraReserva;

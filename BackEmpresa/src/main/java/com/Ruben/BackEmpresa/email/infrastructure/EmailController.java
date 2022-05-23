@@ -3,25 +3,41 @@ package com.Ruben.BackEmpresa.email.infrastructure;
 import com.Ruben.BackEmpresa.email.application.EmailService;
 import com.Ruben.BackEmpresa.email.domain.Email;
 import com.Ruben.BackEmpresa.email.infrastructure.dto.OutputEmailDTO;
-import com.Ruben.BackEmpresa.email.infrastructure.repository.EmailRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.NumberFormat;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/Empresa/correos")
+@RequestMapping("api/v0/correos")
 @AllArgsConstructor
 public class EmailController {
 
     private final EmailService emailService;
 
     @GetMapping("sentTo")
-    public List<OutputEmailDTO> emailSentTo(@RequestParam String correo){
+    public List<OutputEmailDTO> emailSentTo(@RequestParam String correo) {
 
         List<OutputEmailDTO> outputEmailDTOList = new ArrayList<>();
-        for (Email email: emailService.findByEmail(correo)) {
+        for (Email email : emailService.findByEmail(correo)) {
+            outputEmailDTOList.add(new OutputEmailDTO(email));
+        }
+        return outputEmailDTOList;
+    }
+
+    @GetMapping("getCorreos")
+    public List<OutputEmailDTO> getCorreos(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaInferior,
+                                           @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaSuperior, @RequestParam(defaultValue = "%") String ciudadDestino, @RequestParam(defaultValue = "00") @NumberFormat(pattern = "99") Float horaInferior,
+                                           @RequestParam(defaultValue = "24") @NumberFormat(pattern = "99") Float horaSuperior) {
+        List<OutputEmailDTO> outputEmailDTOList = new ArrayList<>();
+        for (Email email : emailService.getCorreos(ciudadDestino, fechaInferior, fechaSuperior, horaInferior, horaSuperior)) {
             outputEmailDTOList.add(new OutputEmailDTO(email));
         }
         return outputEmailDTOList;

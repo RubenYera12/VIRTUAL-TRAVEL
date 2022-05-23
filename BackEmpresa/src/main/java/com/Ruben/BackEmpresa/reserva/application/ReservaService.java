@@ -12,6 +12,8 @@ public interface ReservaService {
     String deleteById(String id) throws Exception;
     Reserva updateReserva(Reserva reserva,String id) throws Exception;
 
+    void listenTopic(String s, Reserva readValue) throws Exception;
+
     void cancelAllReservas(Date fecha, Float hora, String ciudad) throws Exception;
 
     void cancelReservaById(String id_reserva) throws Exception;

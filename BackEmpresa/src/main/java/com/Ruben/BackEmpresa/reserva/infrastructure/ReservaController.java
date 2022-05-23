@@ -18,12 +18,14 @@ import java.util.HashMap;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/Empresa/Reserva")
+@RequestMapping("api/v0/Reserva")
 @AllArgsConstructor
 public class ReservaController {
     private final ReservaService reservaService;
     private final BusService busService;
     private final EmailService emailService;
+
+//    private KafkaTemplate<>
 
     @PostMapping("reserva")
     public OutputReservaDTO reservar(@RequestBody InputReservaDTO inputReservaDTO) throws Exception {

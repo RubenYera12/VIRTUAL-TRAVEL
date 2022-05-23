@@ -5,19 +5,41 @@ import com.Ruben.BackEmpresa.bus.infrastructure.repository.BusRepository;
 import com.Ruben.BackEmpresa.email.application.EmailService;
 import com.Ruben.BackEmpresa.reserva.domain.Reserva;
 import com.Ruben.BackEmpresa.reserva.infrastructure.repository.ReservaRepository;
-import lombok.AllArgsConstructor;
+import com.Ruben.BackEmpresa.shared.kafka.Producer.KafkaSender;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@Transactional
 public class ReservaServiceImpl implements ReservaService {
     private final ReservaRepository reservaRepository;
     private final BusRepository busRepository;
     private final EmailService emailService;
+
+
+    private KafkaSender kafkaSender;
+    @Value("${server.port}")
+    private String port;
+
+    @Value("${topic}")
+    private String topic;
+
+    private final String CLASE = "RESERVA";
+
+    public ReservaServiceImpl(ReservaRepository reservaRepository, BusRepository busRepository, EmailService emailService, KafkaSender kafkaSender) {
+        this.reservaRepository = reservaRepository;
+        this.busRepository = busRepository;
+        this.emailService = emailService;
+        this.kafkaSender = kafkaSender;
+    }
+//    private KafkaReservaProducerConfig kafkaReservaProducerConfig;
+//    private KafkaCancelarProducerConfig kafkaCancelarProducerConfig;
 
 
     @Override
@@ -41,14 +63,30 @@ public class ReservaServiceImpl implements ReservaService {
             reserva.setEstado("ACEPTADO");
             reserva.setBus(bus);
             bus.getReservas().add(reserva);
-            emailService.emailConfirmacion(reserva);
+            reserva=reservaRepository.save(reserva);
+            //emailService.emailConfirmacion(reserva);
         } else {
             reserva.setEstado("CANCELADO");
             reserva.setBus(null);
+            // No guardamos la reserva en la BDD Central
+            //reservaRepository.save(reserva);
         }
 
-        //Realizamos reserva
-        return reservaRepository.save(reserva);
+        //Enviamos la reserva al BackWeb
+        kafkaSender.sendMessage(topic,reserva,port,"reservar",CLASE);
+        return reserva;
+    }
+
+    @Override
+    public void listenTopic(String s, Reserva readValue) throws Exception {
+        switch (s){
+            case "reservar" ->{
+                reservar(readValue);
+            }
+            case "cancelar1Reserva"->{
+                cancelReservaById(readValue.getId());
+            }
+        }
     }
 
     @Override
@@ -61,14 +99,18 @@ public class ReservaServiceImpl implements ReservaService {
         if (bus.getEstado().equals("CANCELADO"))
             throw new Exception("El viaje ya está cancelado");
         //Mandamos correo de cancelación a todos los usuarios y cancelamos las reservas
-        for (Reserva reserva : bus.getReservas()) {
-            emailService.emailCancelacionViaje(reserva);
-            reserva.setBus(null);
-            reserva.setEstado("CANCELADO");
-        }
+        List<Reserva> reservaList = new ArrayList<>(bus.getReservas());
         bus.getReservas().clear();
+        for (Reserva reserva : reservaList) {
+            emailService.emailCancelacionViaje(reserva);
+            reservaRepository.delete(reserva);
+//            reserva.setBus(null);
+//            reserva.setEstado("CANCELADO");
+        }
         bus.setEstado("CANCELADO");
         busRepository.save(bus);
+        kafkaSender.sendMessage(topic,bus,port,"cancelarBus","BUS");
+
     }
 
     @Override
@@ -81,12 +123,13 @@ public class ReservaServiceImpl implements ReservaService {
             throw new Exception("La reserva ya ha sido cancelada");
 
         //Cancelamos la reserva
-        Bus bus = reserva.getBus();
-        bus.getReservas().remove(reserva);
-        reserva.setBus(null);
-        reserva.setEstado("CANCELADO");
-        reservaRepository.save(reserva);
+//        Bus bus = reserva.getBus();
+//        bus.getReservas().remove(reserva);
+//        reserva.setBus(null);
+//        reserva.setEstado("CANCELADO");
+        reservaRepository.delete(reserva);
         emailService.emailCancelacionReserva(reserva);
+        kafkaSender.sendMessage(topic,reserva,port,"cancelar1Reserva",CLASE);
 
 
     }
