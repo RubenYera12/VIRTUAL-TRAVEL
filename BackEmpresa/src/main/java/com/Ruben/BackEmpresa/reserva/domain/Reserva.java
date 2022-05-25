@@ -41,7 +41,6 @@ public class Reserva {
     private Bus bus;
 
     public Reserva(InputReservaDTO inputReservaDTO){
-        setId(inputReservaDTO.getId());
         setCiudadDestino(inputReservaDTO.getCiudadDestino());
         setNombre(inputReservaDTO.getNombre());
         setApellido(inputReservaDTO.getApellido());
@@ -50,6 +49,5 @@ public class Reserva {
         setFechaReserva(inputReservaDTO.getFechaReserva());
         setHoraReserva(inputReservaDTO.getHoraReserva());
         setEstado(inputReservaDTO.getEstado());
-        setBus(inputReservaDTO.getBus());
     }
 }

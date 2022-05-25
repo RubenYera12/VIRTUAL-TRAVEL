@@ -43,7 +43,6 @@ public class Bus {
     private String estado = "ACTIVO";
 
     public Bus(InputBusDTO inputBusDTO){
-        setId(inputBusDTO.getId());
         setReservas(inputBusDTO.getReservas());
         setCiudadDestino(inputBusDTO.getCiudadDestino());
         setFechaReserva(inputBusDTO.getFechaReserva());

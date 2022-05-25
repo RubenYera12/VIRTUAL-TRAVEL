@@ -13,7 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class InputBusDTO {
-    private String id;
     private final int capacidad = 40;
     private List<Reserva> reservas=new ArrayList<>();
     private String ciudadDestino;

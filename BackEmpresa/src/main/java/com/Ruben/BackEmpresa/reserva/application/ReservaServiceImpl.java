@@ -18,12 +18,12 @@ import java.util.Optional;
 @Service
 @Transactional
 public class ReservaServiceImpl implements ReservaService {
+
     private final ReservaRepository reservaRepository;
     private final BusRepository busRepository;
     private final EmailService emailService;
+    private final KafkaSender kafkaSender;
 
-
-    private KafkaSender kafkaSender;
     @Value("${server.port}")
     private String port;
 
@@ -38,9 +38,6 @@ public class ReservaServiceImpl implements ReservaService {
         this.emailService = emailService;
         this.kafkaSender = kafkaSender;
     }
-//    private KafkaReservaProducerConfig kafkaReservaProducerConfig;
-//    private KafkaCancelarProducerConfig kafkaCancelarProducerConfig;
-
 
     @Override
     public Reserva reservar(Reserva reserva) throws Exception {
@@ -63,8 +60,8 @@ public class ReservaServiceImpl implements ReservaService {
             reserva.setEstado("ACEPTADO");
             reserva.setBus(bus);
             bus.getReservas().add(reserva);
-            reserva=reservaRepository.save(reserva);
-            //emailService.emailConfirmacion(reserva);
+            reserva = reservaRepository.save(reserva);
+            emailService.emailConfirmacion(reserva);
         } else {
             reserva.setEstado("CANCELADO");
             reserva.setBus(null);
@@ -73,19 +70,15 @@ public class ReservaServiceImpl implements ReservaService {
         }
 
         //Enviamos la reserva al BackWeb
-        kafkaSender.sendMessage(topic,reserva,port,"reservar",CLASE);
+        kafkaSender.sendMessage(topic, reserva, port, "reservar", CLASE);
         return reserva;
     }
 
     @Override
     public void listenTopic(String s, Reserva readValue) throws Exception {
-        switch (s){
-            case "reservar" ->{
-                reservar(readValue);
-            }
-            case "cancelar1Reserva"->{
-                cancelReservaById(readValue.getId());
-            }
+        switch (s) {
+            case "reservar" -> reservar(readValue);
+            case "cancelar1Reserva" -> cancelReservaById(readValue.getId());
         }
     }
 
@@ -104,12 +97,11 @@ public class ReservaServiceImpl implements ReservaService {
         for (Reserva reserva : reservaList) {
             emailService.emailCancelacionViaje(reserva);
             reservaRepository.delete(reserva);
-//            reserva.setBus(null);
-//            reserva.setEstado("CANCELADO");
         }
+        //Cancelamos el autobus
         bus.setEstado("CANCELADO");
         busRepository.save(bus);
-        kafkaSender.sendMessage(topic,bus,port,"cancelarBus","BUS");
+        kafkaSender.sendMessage(topic, bus, port, "cancelarBus", "BUS");
 
     }
 
@@ -123,15 +115,9 @@ public class ReservaServiceImpl implements ReservaService {
             throw new Exception("La reserva ya ha sido cancelada");
 
         //Cancelamos la reserva
-//        Bus bus = reserva.getBus();
-//        bus.getReservas().remove(reserva);
-//        reserva.setBus(null);
-//        reserva.setEstado("CANCELADO");
         reservaRepository.delete(reserva);
         emailService.emailCancelacionReserva(reserva);
-        kafkaSender.sendMessage(topic,reserva,port,"cancelar1Reserva",CLASE);
-
-
+        kafkaSender.sendMessage(topic, reserva, port, "cancelar1Reserva", CLASE);
     }
 
     @Override
@@ -143,8 +129,7 @@ public class ReservaServiceImpl implements ReservaService {
     }
 
     //Comprueba si existen plazas disponibles
-    @Override
-    public boolean checkPlazas(Bus bus) throws Exception {
+    public boolean checkPlazas(Bus bus) {
         return bus.getReservas().size() < bus.getCapacidad();
     }
 
@@ -168,18 +153,4 @@ public class ReservaServiceImpl implements ReservaService {
         reservaRepository.deleteById(id);
         return "Se ha borrado correctamente la reserva";
     }
-
-    @Override
-    public Reserva updateReserva(Reserva reserva, String id) throws Exception {
-        //Comprobamos si existe la Reserva
-        Optional<Reserva> reservaChecked = reservaRepository.findById(id);
-        if (reservaChecked.isEmpty()) {
-            throw new Exception("No existe reserva con ID: " + reserva.getId());
-        }
-        //TODO: comprobar nulos
-        reserva.setId(id);
-        return reservaRepository.save(reserva);
-    }
-
-
 }

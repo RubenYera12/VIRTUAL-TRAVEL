@@ -22,9 +22,9 @@ public class BusServiceImpl implements BusService {
     @Override
     public Bus addBus(Bus bus) throws Exception {
         //Comprobamos si existe el bus
-        if (bus.getId() != null) {
-            Optional<Bus> chekedBus = busRepository.findById(bus.getId());
-            if (!chekedBus.isEmpty()) {
+        if (bus.getCiudadDestino()!= null ||bus.getHoraReserva()!=null||bus.getFechaReserva()!=null) {
+            Optional<Bus> chekedBus = busRepository.findByCiudadDestinoAndFechaReservaAndHoraReserva(bus.getCiudadDestino(),bus.getFechaReserva(),bus.getHoraReserva());
+            if (chekedBus.isPresent()) {
                 throw new Exception("Ya existe un Autobus con ID: " + bus.getId());
             }
         }
@@ -76,7 +76,7 @@ public class BusServiceImpl implements BusService {
     }
 
     @Override
-    public Bus findBusByConditions(Date fecha, Float hora, String ciudad) throws Exception {
+    public Bus findByCiudadDestinoAndFechaReservaAndHoraReserva(String ciudad,Date fecha, Float hora) throws Exception {
         return busRepository.
                 findByCiudadDestinoAndFechaReservaAndHoraReserva(ciudad, fecha, hora).orElseThrow(() -> new Exception("No se ha encontrado un autobus con estos requisitos."));
     }
@@ -111,7 +111,7 @@ public class BusServiceImpl implements BusService {
             throw new Exception("El viaje ya está cancelado");
         //Mandamos correo de cancelación a todos los usuarios y cancelamos las reservas
         for (Reserva reserva : bus.getReservas()) {
-            reservaService.cancel(reserva);
+            reservaService.cancelCancelFromBackEmpresa(reserva);
         }
         bus.getReservas().clear();
         bus.setEstado("CANCELADO");

@@ -13,7 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OutputBusDTO {
-    private String id;
     private final int capacidad = 40;
     private List<Reserva> reservas;
     private String ciudadDestino;
@@ -22,7 +21,6 @@ public class OutputBusDTO {
     private String estado = "ACTIVO";
 
     public OutputBusDTO(Bus bus) {
-        setId(bus.getId());
         setReservas(bus.getReservas());
         setCiudadDestino(bus.getCiudadDestino());
         setFechaReserva(bus.getFechaReserva());

@@ -1,7 +1,6 @@
 package com.Ruben.BackWeb.email.domain;
 
 import com.Ruben.BackWeb.StringPrefixedSequenceIdGenerator;
-import com.Ruben.BackWeb.email.infrastructure.dto.InputEmailDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,17 +35,11 @@ public class Email {
     private Date fechaReserva;
     private Float horaReserva;
 
-    public Email(String ciudadDestino,String email,Date fechaReserva, Float horaReserva){
+    public Email(String ciudadDestino, String email, Date fechaReserva, Float horaReserva) {
         this.setCiudadDestino(ciudadDestino);
         this.setEmail(email);
         this.setFechaReserva(fechaReserva);
         this.setHoraReserva(horaReserva);
     }
 
-    public Email(InputEmailDTO inputEmailDTO){
-        this.setCiudadDestino(inputEmailDTO.getCiudadDestino());
-        this.setEmail(inputEmailDTO.getEmail());
-        this.setFechaReserva(inputEmailDTO.getFechaReserva());
-        this.setHoraReserva(inputEmailDTO.getHoraReserva());
-    }
 }
