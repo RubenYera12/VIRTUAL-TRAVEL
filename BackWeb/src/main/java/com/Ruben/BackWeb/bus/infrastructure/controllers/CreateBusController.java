@@ -13,7 +13,7 @@ public class CreateBusController {
     //En teoría un cliente no puede agregar un autobus
 
 //    @PostMapping("addBus")
-//    public ResponseEntity<OutputBusDTO> addBus(@RequestBody InputBusDTO inputBusDTO) throws Exception {
+//    public ResponseEntity<OutputBusDTO> addBus(@RequestBody InputBusDTO inputBusDTO) throws UnprocesableException {
 //        Bus bus = new Bus(inputBusDTO);
 //        return ResponseEntity.ok(new OutputBusDTO(busService.addBus(bus)));
 //    }

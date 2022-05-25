@@ -2,6 +2,8 @@ package com.Ruben.BackEmpresa.bus.application;
 
 import com.Ruben.BackEmpresa.bus.domain.Bus;
 import com.Ruben.BackEmpresa.bus.infrastructure.repository.BusRepository;
+import com.Ruben.BackEmpresa.shared.exceptions.NotFoundException;
+import com.Ruben.BackEmpresa.shared.exceptions.UnprocesableException;
 import com.Ruben.BackEmpresa.shared.kafka.Producer.KafkaSender;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -30,12 +32,12 @@ public class BusServiceImpl implements BusService {
     }
 
     @Override
-    public Bus addBus(Bus bus) throws Exception {
+    public Bus addBus(Bus bus) throws UnprocesableException {
         //Comprobamos si existe el bus
         if (bus.getCiudadDestino()!= null ||bus.getHoraReserva()!=null||bus.getFechaReserva()!=null) {
             Optional<Bus> chekedBus = busRepository.findByCiudadDestinoAndFechaReservaAndHoraReserva(bus.getCiudadDestino(),bus.getFechaReserva(),bus.getHoraReserva());
             if (chekedBus.isPresent()) {
-                throw new Exception("Ya existe un Autobus con ID: " + bus.getId());
+                throw new UnprocesableException("Ya existe un Autobus con ID: " + bus.getId());
             }
         }
         kafkaSender.sendMessage(topic,bus,port,"crearBus",CLASE);
@@ -48,52 +50,26 @@ public class BusServiceImpl implements BusService {
     }
 
     @Override
-    public Bus findById(String id) throws Exception {
+    public Bus findById(String id) throws NotFoundException {
 
-        return busRepository.findById(id).orElseThrow(()->new Exception("No existe un autobus con ID: "+id));
+        return busRepository.findById(id).orElseThrow(()->new NotFoundException("No existe un autobus con ID: "+id));
     }
 
     @Override
-    public String deleteById(String id) throws Exception {
+    public String deleteById(String id) throws NotFoundException {
         Optional<Bus> chekedBus = busRepository.findById(id);
         if (chekedBus.isEmpty()) {
-            throw new Exception("No existe un Autobus con ID: " + id);
+            throw new NotFoundException("No existe un Autobus con ID: " + id);
         }
         busRepository.deleteById(id);
+        kafkaSender.sendMessage(topic,chekedBus.get(),port,"borrarBus",CLASE);
         return "Se ha borrado el autobus correctamente";
     }
 
     @Override
-    public Bus updateBus(Bus bus, String id) throws Exception {
-        Optional<Bus> chekedBus = busRepository.findById(id);
-        if (chekedBus.isEmpty()) {
-            throw new Exception("No existe un Autobus con ID: " + bus.getId());
-        }
-        //TODO: Comprobar nulos
-        bus.setId(id);
-        if (bus.getCiudadDestino()==null){
-            bus.setCiudadDestino(chekedBus.get().getCiudadDestino());
-        }
-        if(bus.getFechaReserva()==null){
-            bus.setFechaReserva(chekedBus.get().getFechaReserva());
-        }
-        if (bus.getHoraReserva()==null){
-            bus.setHoraReserva(chekedBus.get().getHoraReserva());
-        }
-        if(bus.getReservas()==null){
-            bus.setReservas(chekedBus.get().getReservas());
-        }
-        return busRepository.save(bus);
-    }
-
-    @Override
-    public Bus findByCiudadDestinoAndFechaReservaAndHoraReserva(String ciudad,Date fecha, Float hora) throws Exception {
+    public Bus findByCiudadDestinoAndFechaReservaAndHoraReserva(String ciudad,Date fecha, Float hora) throws NotFoundException {
         return busRepository.
-        findByCiudadDestinoAndFechaReservaAndHoraReserva(ciudad,fecha,hora).orElseThrow(()->new Exception("No se ha encontrado un autobus con estos requisitos."));
-    }
-
-    @Override
-    public void listenTopic(String s, Bus readValue) {
-
+        findByCiudadDestinoAndFechaReservaAndHoraReserva(ciudad,fecha,hora)
+                .orElseThrow(()->new NotFoundException("No se ha encontrado un autobus con estos requisitos."));
     }
 }

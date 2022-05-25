@@ -1,9 +1,9 @@
-package com.Ruben.BackWeb.bus.infrastructure.controllers;
+package com.Ruben.BackEmpresa.bus.infrastructure.controllers;
 
-import com.Ruben.BackWeb.bus.application.BusService;
-import com.Ruben.BackWeb.bus.domain.Bus;
-import com.Ruben.BackWeb.bus.infrastructure.dto.OutputBusDTO;
-import com.Ruben.BackWeb.shared.exceptions.NotFoundException;
+import com.Ruben.BackEmpresa.bus.application.BusService;
+import com.Ruben.BackEmpresa.bus.domain.Bus;
+import com.Ruben.BackEmpresa.bus.infrastructure.dto.OutputBusDTO;
+import com.Ruben.BackEmpresa.shared.exceptions.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

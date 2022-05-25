@@ -5,11 +5,14 @@ import com.Ruben.BackEmpresa.bus.infrastructure.repository.BusRepository;
 import com.Ruben.BackEmpresa.email.application.EmailService;
 import com.Ruben.BackEmpresa.reserva.domain.Reserva;
 import com.Ruben.BackEmpresa.reserva.infrastructure.repository.ReservaRepository;
+import com.Ruben.BackEmpresa.shared.exceptions.NotFoundException;
+import com.Ruben.BackEmpresa.shared.exceptions.UnprocesableException;
 import com.Ruben.BackEmpresa.shared.kafka.Producer.KafkaSender;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -40,21 +43,21 @@ public class ReservaServiceImpl implements ReservaService {
     }
 
     @Override
-    public Reserva reservar(Reserva reserva) throws Exception {
+    public Reserva reservar(Reserva reserva) throws NotFoundException,UnprocesableException, UnsupportedEncodingException {
         //Comprobamos si el usuario ya ha reservado
         Optional<Reserva> reservaCheck = reservaRepository
                 .findByCorreoAndFechaReservaAndHoraReservaAndCiudadDestino(reserva.getCorreo(), reserva.getFechaReserva(), reserva.getHoraReserva(), reserva.getCiudadDestino());
         if (reservaCheck.isPresent()) {
             //Comprobamos el estado de la reserva
             if (reservaCheck.get().getEstado().equals("ACEPTADO")) {
-                throw new Exception("Ya has reservado");
+                throw new UnprocesableException("Ya has reservado");
             }
             reserva.setId(reservaCheck.get().getId());
         }
         //Buscamos el autobus con los datos de la reserva
         Bus bus = busRepository
                 .findByCiudadDestinoAndFechaReservaAndHoraReserva(reserva.getCiudadDestino(), reserva.getFechaReserva(), reserva.getHoraReserva())
-                .orElseThrow(() -> new Exception("No existe un viaje con estos parámetros."));
+                .orElseThrow(() -> new NotFoundException("No existe un viaje con estos parámetros."));
         //Comprobamos que haya plazas en el autobus y el estado del autobus
         if (checkPlazas(bus) && bus.getEstado().equals("ACTIVO")) {
             reserva.setEstado("ACEPTADO");
@@ -75,7 +78,7 @@ public class ReservaServiceImpl implements ReservaService {
     }
 
     @Override
-    public void listenTopic(String s, Reserva readValue) throws Exception {
+    public void listenTopic(String s, Reserva readValue) throws NotFoundException,UnprocesableException,UnsupportedEncodingException {
         switch (s) {
             case "reservar" -> reservar(readValue);
             case "cancelar1Reserva" -> cancelReservaById(readValue.getId());
@@ -83,14 +86,14 @@ public class ReservaServiceImpl implements ReservaService {
     }
 
     @Override
-    public void cancelAllReservas(Date fecha, Float hora, String ciudad) throws Exception {
+    public void cancelAllReservas(Date fecha, Float hora, String ciudad) throws NotFoundException,UnprocesableException,UnsupportedEncodingException {
         //Buscamos el autobus
         Bus bus = busRepository
                 .findByCiudadDestinoAndFechaReservaAndHoraReserva(ciudad, fecha, hora)
-                .orElseThrow(() -> new Exception("No se ha encontrado un autobus con estos parámetros"));
+                .orElseThrow(() -> new NotFoundException("No se ha encontrado un autobus con estos parámetros"));
         //Comprobamos el estado del autobus
         if (bus.getEstado().equals("CANCELADO"))
-            throw new Exception("El viaje ya está cancelado");
+            throw new UnprocesableException("El viaje ya está cancelado");
         //Mandamos correo de cancelación a todos los usuarios y cancelamos las reservas
         List<Reserva> reservaList = new ArrayList<>(bus.getReservas());
         bus.getReservas().clear();
@@ -102,17 +105,18 @@ public class ReservaServiceImpl implements ReservaService {
         bus.setEstado("CANCELADO");
         busRepository.save(bus);
         kafkaSender.sendMessage(topic, bus, port, "cancelarBus", "BUS");
-
     }
 
     @Override
-    public void cancelReservaById(String id_reserva) throws Exception {
+    public void cancelReservaById(String id_reserva) throws NotFoundException,UnprocesableException,UnsupportedEncodingException {
         //Buscamos la reserva en la BDD
-        Reserva reserva = reservaRepository.findById(id_reserva).orElseThrow(() -> new Exception("No se ha encontrado una reserva con ID: " + id_reserva));
+        Reserva reserva = reservaRepository
+                .findById(id_reserva)
+                .orElseThrow(() -> new NotFoundException("No se ha encontrado una reserva con ID: " + id_reserva));
 
         //Comprobamos estado de la reserva
         if (reserva.getEstado().equals("CANCELADO"))
-            throw new Exception("La reserva ya ha sido cancelada");
+            throw new UnprocesableException("La reserva ya ha sido cancelada");
 
         //Cancelamos la reserva
         reservaRepository.delete(reserva);
@@ -121,10 +125,10 @@ public class ReservaServiceImpl implements ReservaService {
     }
 
     @Override
-    public List<Reserva> findReservaByConditions(Date fecha, Float hora, String ciudad) throws Exception {
+    public List<Reserva> findReservaByConditions(Date fecha, Float hora, String ciudad) throws NotFoundException {
         Bus bus = busRepository
                 .findByCiudadDestinoAndFechaReservaAndHoraReserva(ciudad, fecha, hora)
-                .orElseThrow(() -> new Exception("No se ha encontrado un autobus con estos requisitos."));
+                .orElseThrow(() -> new NotFoundException("No se ha encontrado un autobus con estos requisitos."));
         return bus.getReservas();
     }
 
@@ -140,17 +144,18 @@ public class ReservaServiceImpl implements ReservaService {
     }
 
     @Override
-    public Reserva findById(String id) throws Exception {
-        return reservaRepository.findById(id).orElseThrow(() -> new Exception("No existe una reserva con ID: " + id));
+    public Reserva findById(String id) throws NotFoundException {
+        return reservaRepository.findById(id).orElseThrow(() -> new NotFoundException("No existe una reserva con ID: " + id));
     }
 
     @Override
-    public String deleteById(String id) throws Exception {
+    public String deleteById(String id) throws NotFoundException {
         Optional<Reserva> reservaChecked = reservaRepository.findById(id);
         if (reservaChecked.isEmpty()) {
-            throw new Exception("No existe una reserva con ID: " + id);
+            throw new NotFoundException("No existe una reserva con ID: " + id);
         }
         reservaRepository.deleteById(id);
+        kafkaSender.sendMessage(topic,reservaChecked.get(),port,"borrarReserva",CLASE);
         return "Se ha borrado correctamente la reserva";
     }
 }

@@ -18,7 +18,7 @@ public class DeleteBusController {
     //Un usuario no puede borrar un autobus
 
 //    @DeleteMapping("delete/{id}")
-//    public ResponseEntity<String> delete(@PathVariable String id) throws Exception {
+//    public ResponseEntity<String> delete(@PathVariable String id) throws NotFoundException {
 //        return ResponseEntity.ok(busService.deleteById(id));
 //    }
 }

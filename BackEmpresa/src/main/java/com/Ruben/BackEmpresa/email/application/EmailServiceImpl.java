@@ -73,9 +73,4 @@ public class EmailServiceImpl implements EmailService{
         return emailRepository.findByCiudadDestinoLikeAndFechaReservaBetweenAndHoraReservaBetween(ciudadDestino, fechaInferior, fechaSuperior, horaInferior, horaSuperior);
     }
 
-    @Override
-    public void listenTopic(String s, Email readValue) {
-
-    }
-
 }

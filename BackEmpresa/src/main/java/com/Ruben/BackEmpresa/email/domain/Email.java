@@ -1,8 +1,6 @@
 package com.Ruben.BackEmpresa.email.domain;
 
 import com.Ruben.BackEmpresa.StringPrefixedSequenceIdGenerator;
-import com.Ruben.BackEmpresa.bus.infrastructure.dto.InputBusDTO;
-import com.Ruben.BackEmpresa.email.infrastructure.dto.InputEmailDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -44,10 +42,5 @@ public class Email {
         this.setHoraReserva(horaReserva);
     }
 
-    public Email(InputEmailDTO inputEmailDTO){
-        this.setCiudadDestino(inputEmailDTO.getCiudadDestino());
-        this.setEmail(inputEmailDTO.getEmail());
-        this.setFechaReserva(inputEmailDTO.getFechaReserva());
-        this.setHoraReserva(inputEmailDTO.getHoraReserva());
-    }
+
 }

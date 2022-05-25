@@ -2,10 +2,10 @@ package com.Ruben.BackWeb.shared.kafka.listener;
 
 import com.Ruben.BackWeb.bus.application.BusService;
 import com.Ruben.BackWeb.bus.domain.Bus;
-import com.Ruben.BackWeb.email.application.EmailService;
-import com.Ruben.BackWeb.email.domain.Email;
+
 import com.Ruben.BackWeb.reserva.application.ReservaService;
 import com.Ruben.BackWeb.reserva.domain.Reserva;
+import com.Ruben.BackWeb.shared.exceptions.NotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -25,9 +25,6 @@ public class KafkaRouter {
 
     @Autowired
     ReservaService reservaService;
-
-    @Autowired
-    EmailService emailService;
 
     @KafkaListener(topics = "BACKEMPRESA", groupId = "${group}")
     public void listenTopic(@Payload ConsumerRecord<String, Object> record) throws JsonProcessingException {
@@ -63,10 +60,6 @@ public class KafkaRouter {
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
-                }
-                case "EMAIL" -> {
-                    System.out.println("RECIBIDO MAIL! accion: " + action[0]);
-                    emailService.listenTopic(action[0], mapper.readValue((String)record.value(), Email.class));
                 }
                 default -> System.out.println("error");
             }

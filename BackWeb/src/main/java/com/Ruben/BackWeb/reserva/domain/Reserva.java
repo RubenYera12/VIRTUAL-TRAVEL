@@ -49,6 +49,5 @@ public class Reserva {
         setCorreo(inputReservaDTO.getCorreo());
         setFechaReserva(inputReservaDTO.getFechaReserva());
         setHoraReserva(inputReservaDTO.getHoraReserva());
-        setEstado(inputReservaDTO.getEstado());
     }
 }

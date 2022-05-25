@@ -1,9 +1,7 @@
 package com.Ruben.BackEmpresa.shared.kafka.listener;
 
 import com.Ruben.BackEmpresa.bus.application.BusService;
-import com.Ruben.BackEmpresa.bus.domain.Bus;
 import com.Ruben.BackEmpresa.email.application.EmailService;
-import com.Ruben.BackEmpresa.email.domain.Email;
 import com.Ruben.BackEmpresa.reserva.application.ReservaService;
 import com.Ruben.BackEmpresa.reserva.domain.Reserva;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -51,24 +49,15 @@ public class KafkaRouter {
 
         if (!port[0].equals(puerto)) {
             System.out.println("Mensaje recibido");
-            switch (clase[0]) {
-                case "BUS" -> {
-                    System.out.println("RECIBIDO BUS! accion: " + action[0]);
-                    busService.listenTopic(action[0], mapper.readValue((String)record.value(), Bus.class));
+            if ("RESERVA".equals(clase[0])) {
+                System.out.println("RECIBIDO RESERVA! accion: " + action[0]);
+                try {
+                    reservaService.listenTopic(action[0], mapper.readValue((String) record.value(), Reserva.class));
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
                 }
-                case "RESERVA" -> {
-                    System.out.println("RECIBIDO RESERVA! accion: " + action[0]);
-                    try {
-                        reservaService.listenTopic(action[0], mapper.readValue((String)record.value(), Reserva.class));
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                    }
-                }
-                case "EMAIL" -> {
-                    System.out.println("RECIBIDO MAIL! accion: " + action[0]);
-                    emailService.listenTopic(action[0], mapper.readValue((String)record.value(), Email.class));
-                }
-                default -> System.out.println("error");
+            } else {
+                System.out.println("error");
             }
         }
     }
