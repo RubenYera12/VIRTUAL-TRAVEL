@@ -3,7 +3,6 @@ package com.Ruben.BackEmpresa.bus.infrastructure.controllers;
 import com.Ruben.BackEmpresa.bus.application.BusService;
 import com.Ruben.BackEmpresa.bus.domain.Bus;
 import com.Ruben.BackEmpresa.bus.infrastructure.dto.OutputBusDTO;
-import com.Ruben.BackEmpresa.shared.exceptions.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,12 +20,12 @@ public class ReadBusController {
 
     private final BusService busService;
 
-    @GetMapping("findById/{id}")
-    public ResponseEntity<OutputBusDTO> findById(@PathVariable String id) throws NotFoundException {
+    @GetMapping("{id}")
+    public ResponseEntity<OutputBusDTO> findById(@PathVariable String id) throws Exception {
         return ResponseEntity.ok(new OutputBusDTO(busService.findById(id)));
     }
 
-    @GetMapping("findAll")
+    @GetMapping()
     public ResponseEntity<List<OutputBusDTO>> findAll() {
         List<OutputBusDTO> outputBusDTOList = new ArrayList<>();
         for (Bus bus : busService.findAll()) {

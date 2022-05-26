@@ -5,6 +5,7 @@ import com.Ruben.BackWeb.shared.exceptions.NotFoundException;
 import com.Ruben.BackWeb.shared.exceptions.UnprocesableException;
 import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,18 +20,9 @@ public class CancelReservaController {
 
     private final ReservaService reservaService;
 
-    @PutMapping("cancel/Trip")
-    public String cancelTrip(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") @Valid @NotNull Date dia,
-                             @RequestParam @Valid @NotNull Float hora,
-                             @RequestParam @Valid @NotNull String destino)
-            throws NotFoundException, UnprocesableException {
-        reservaService.cancelAllReservas(dia, hora, destino);
-        return "Se ha cancelado el viaje correctamente.";
-    }
-
-    @PutMapping("cancel/Reserva/{id}")
-    public String cancelReserva(@PathVariable String id) throws NotFoundException,UnprocesableException {
+    @PutMapping("cancel/{id}")
+    public ResponseEntity<String> cancelReserva(@PathVariable String id) throws Exception {
         reservaService.cancelReservaById(id);
-        return "Se ha cancelado la reserva correctamente";
+        return ResponseEntity.ok("Se ha cancelado la reserva correctamente");
     }
 }

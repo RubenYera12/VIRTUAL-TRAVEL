@@ -7,5 +7,5 @@ import java.util.Date;
 import java.util.Optional;
 
 public interface ReservaRepository extends JpaRepository<Reserva,String> {
-    Optional<Reserva> findByCorreoAndFechaReservaAndHoraReservaAndCiudadDestino(String correo, Date fechaReserva, Float horaReserva, String ciudadDestino);
+    Optional<Reserva> findByCorreoIgnoreCaseAndFechaReservaAndHoraReservaAndCiudadDestinoIgnoreCase(String correo, Date fechaReserva, Float horaReserva, String ciudadDestino);
 }

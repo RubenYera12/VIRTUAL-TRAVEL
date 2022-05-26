@@ -72,4 +72,16 @@ public class BusServiceImpl implements BusService {
         findByCiudadDestinoAndFechaReservaAndHoraReserva(ciudad,fecha,hora)
                 .orElseThrow(()->new NotFoundException("No se ha encontrado un autobus con estos requisitos."));
     }
+
+    @Override
+    public Bus activarViaje(String ciudad,Date fecha, Float hora){
+        Bus bus = busRepository
+                .findByCiudadDestinoAndFechaReservaAndHoraReserva(ciudad, fecha, hora)
+                .orElseThrow(()->new NotFoundException("No se ha encontrado un autobus con estos requisitos."));
+
+        if (bus.getEstado().equals("ACTIVO"))
+            throw new UnprocesableException("El autobus ya está activo.");
+        bus.setEstado("ACTIVO");
+        return busRepository.save(bus);
+    }
 }

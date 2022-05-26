@@ -21,12 +21,12 @@ public class ReadBusController {
 
     private final BusService busService;
 
-    @GetMapping("findById/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<OutputBusDTO> findById(@PathVariable String id) throws NotFoundException {
         return ResponseEntity.ok(new OutputBusDTO(busService.findById(id)));
     }
 
-    @GetMapping("findAll")
+    @GetMapping()
     public ResponseEntity<List<OutputBusDTO>> findAll() {
         List<OutputBusDTO> outputBusDTOList = new ArrayList<>();
         for (Bus bus : busService.findAll()) {

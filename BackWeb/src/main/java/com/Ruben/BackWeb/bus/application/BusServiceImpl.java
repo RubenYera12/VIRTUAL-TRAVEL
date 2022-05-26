@@ -26,7 +26,7 @@ public class BusServiceImpl implements BusService {
         //Comprobamos si existe el bus
         if (bus.getCiudadDestino()!= null ||bus.getHoraReserva()!=null||bus.getFechaReserva()!=null) {
             Optional<Bus> chekedBus = busRepository
-                    .findByCiudadDestinoAndFechaReservaAndHoraReserva(bus.getCiudadDestino(),bus.getFechaReserva(),bus.getHoraReserva());
+                    .findByCiudadDestinoIgnoreCaseAndFechaReservaAndHoraReserva(bus.getCiudadDestino(),bus.getFechaReserva(),bus.getHoraReserva());
             if (chekedBus.isPresent()) {
                 throw new UnprocesableException("Ya existe un Autobus con ID: " + bus.getId());
             }
@@ -60,7 +60,7 @@ public class BusServiceImpl implements BusService {
     @Override
     public Bus findByCiudadDestinoAndFechaReservaAndHoraReserva(String ciudad,Date fecha, Float hora) throws NotFoundException {
         return busRepository.
-                findByCiudadDestinoAndFechaReservaAndHoraReserva(ciudad, fecha, hora).orElseThrow(() -> new NotFoundException("No se ha encontrado un autobus con estos requisitos."));
+                findByCiudadDestinoIgnoreCaseAndFechaReservaAndHoraReserva(ciudad, fecha, hora).orElseThrow(() -> new NotFoundException("No se ha encontrado un autobus con estos requisitos."));
     }
 
     @Override

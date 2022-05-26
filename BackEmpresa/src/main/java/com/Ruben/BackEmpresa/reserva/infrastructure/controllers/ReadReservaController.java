@@ -6,8 +6,6 @@ import com.Ruben.BackEmpresa.reserva.application.ReservaService;
 import com.Ruben.BackEmpresa.reserva.domain.Reserva;
 import com.Ruben.BackEmpresa.reserva.infrastructure.dto.OutputReservaDTO;
 import com.Ruben.BackEmpresa.reserva.infrastructure.dto.ReservaDisponibleOutputDTO;
-import com.Ruben.BackEmpresa.shared.exceptions.NotFoundException;
-import com.Ruben.BackEmpresa.shared.exceptions.UnprocesableException;
 import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -27,12 +25,12 @@ public class ReadReservaController {
     private final ReservaService reservaService;
     private final BusService busService;
 
-    @GetMapping("findById/{id}")
-    public ResponseEntity<OutputReservaDTO> findById(@PathVariable String id) throws NotFoundException {
+    @GetMapping("{id}")
+    public ResponseEntity<OutputReservaDTO> findById(@PathVariable String id) throws Exception {
         return ResponseEntity.ok(new OutputReservaDTO(reservaService.findById(id)));
     }
 
-    @GetMapping("findAll")
+    @GetMapping()
     public ResponseEntity<List<OutputReservaDTO>> findAll() {
         List<OutputReservaDTO> outputReservaDTOList = new ArrayList<>();
         for (Reserva reserva : reservaService.findAll()) {
@@ -41,8 +39,8 @@ public class ReadReservaController {
         return ResponseEntity.ok(outputReservaDTOList);
     }
 
-    @GetMapping("findReservasByConditions")
-    public ResponseEntity<List<OutputReservaDTO>> findReservaByConditions(@RequestParam @Valid @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") Date dia, @RequestParam @Valid @NotNull Float hora, @RequestParam @Valid @NotNull String destino) throws UnprocesableException {
+    @GetMapping("ByDiaHoraDestino")
+    public ResponseEntity<List<OutputReservaDTO>> findReservaByConditions(@RequestParam @Valid @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") Date dia, @RequestParam @Valid @NotNull Float hora, @RequestParam @Valid @NotNull String destino) throws Exception {
         //Creamos la lista de reservas
         List<OutputReservaDTO> outputReservaDTOList = new ArrayList<>();
         for (Reserva reserva : reservaService.findReservaByConditions(dia,hora,destino)) {
@@ -51,8 +49,8 @@ public class ReadReservaController {
         return ResponseEntity.ok(outputReservaDTOList);
     }
 
-    @GetMapping("getNumPlazasByConditions")
-    public ResponseEntity<ReservaDisponibleOutputDTO> getNumPlazasByConditions(@RequestParam @Valid @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd")Date dia, @RequestParam @Valid @NotNull Float hora, @RequestParam @Valid @NotNull String destino) throws NotFoundException {
+    @GetMapping("NumPlazasByDiaHoraDestino")
+    public ResponseEntity<ReservaDisponibleOutputDTO> getNumPlazasByConditions(@RequestParam @Valid @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd")Date dia, @RequestParam @Valid @NotNull Float hora, @RequestParam @Valid @NotNull String destino) throws Exception {
         Bus bus = busService.findByCiudadDestinoAndFechaReservaAndHoraReserva(destino, dia, hora);
         return ResponseEntity.ok(new ReservaDisponibleOutputDTO(bus));
 

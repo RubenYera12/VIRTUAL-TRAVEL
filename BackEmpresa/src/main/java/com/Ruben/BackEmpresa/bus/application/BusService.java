@@ -13,4 +13,6 @@ public interface BusService {
     Bus findById(String id) throws NotFoundException;
     String deleteById(String id) throws NotFoundException;
     Bus findByCiudadDestinoAndFechaReservaAndHoraReserva(String ciudad,Date fecha, Float hora) throws NotFoundException;
+
+    Bus activarViaje(String ciudad, Date fecha, Float hora);
 }

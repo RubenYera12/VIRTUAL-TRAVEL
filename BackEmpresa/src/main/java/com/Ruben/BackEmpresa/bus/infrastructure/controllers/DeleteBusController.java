@@ -1,7 +1,6 @@
 package com.Ruben.BackEmpresa.bus.infrastructure.controllers;
 
 import com.Ruben.BackEmpresa.bus.application.BusService;
-import com.Ruben.BackEmpresa.shared.exceptions.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,8 +15,8 @@ public class DeleteBusController {
 
     private final BusService busService;
 
-    @DeleteMapping("delete/{id}")
-    public ResponseEntity<String> delete(@PathVariable String id) throws NotFoundException {
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> delete(@PathVariable String id) throws Exception {
         return ResponseEntity.ok(busService.deleteById(id));
     }
 }

@@ -38,7 +38,7 @@ public class ReservaServiceImpl implements ReservaService {
     public Reserva reservar(Reserva reserva) throws UnprocesableException,NotFoundException {
         //Comprobamos si el usuario ya ha reservado
         Optional<Reserva> reservaCheck = reservaRepository
-                .findByCorreoAndFechaReservaAndHoraReservaAndCiudadDestino(reserva.getCorreo(), reserva.getFechaReserva(), reserva.getHoraReserva(), reserva.getCiudadDestino());
+                .findByCorreoIgnoreCaseAndFechaReservaAndHoraReservaAndCiudadDestinoIgnoreCase(reserva.getCorreo(), reserva.getFechaReserva(), reserva.getHoraReserva(), reserva.getCiudadDestino());
         if (reservaCheck.isPresent()) {
             //Comprobamos el estado de la reserva
             if (reservaCheck.get().getEstado().equals("ACEPTADO")) {
@@ -48,7 +48,7 @@ public class ReservaServiceImpl implements ReservaService {
         }
         //Buscamos el autobus con los datos de la reserva
         Bus bus = busRepository
-                .findByCiudadDestinoAndFechaReservaAndHoraReserva(reserva.getCiudadDestino(), reserva.getFechaReserva(), reserva.getHoraReserva())
+                .findByCiudadDestinoIgnoreCaseAndFechaReservaAndHoraReserva(reserva.getCiudadDestino(), reserva.getFechaReserva(), reserva.getHoraReserva())
                 .orElseThrow(() -> new NotFoundException("No existe un viaje con estos parámetros."));
         //Comprobamos que haya plazas en el autobus y el estado del autobus
         if (checkPlazas(bus) && bus.getEstado().equals("ACTIVO")) {
@@ -85,7 +85,7 @@ public class ReservaServiceImpl implements ReservaService {
     public void cancelAllReservas(Date fecha, Float hora, String ciudad) throws NotFoundException,UnprocesableException {
         //Buscamos el autobus
         Bus bus = busRepository
-                .findByCiudadDestinoAndFechaReservaAndHoraReserva(ciudad, fecha, hora)
+                .findByCiudadDestinoIgnoreCaseAndFechaReservaAndHoraReserva(ciudad, fecha, hora)
                 .orElseThrow(() -> new NotFoundException("No se ha encontrado un autobus con estos parámetros"));
         //Comprobamos el estado del autobus
         if (bus.getEstado().equals("CANCELADO"))
@@ -104,7 +104,7 @@ public class ReservaServiceImpl implements ReservaService {
     @Override
     public void saveReservaFromBackEmpresa(Reserva reserva) throws NotFoundException {
         Bus bus = busRepository
-                .findByCiudadDestinoAndFechaReservaAndHoraReserva(reserva.getCiudadDestino(), reserva.getFechaReserva(), reserva.getHoraReserva())
+                .findByCiudadDestinoIgnoreCaseAndFechaReservaAndHoraReserva(reserva.getCiudadDestino(), reserva.getFechaReserva(), reserva.getHoraReserva())
                 .orElseThrow(() -> new NotFoundException("No se ha encontrado un autobus con estos parametros."));
         reserva.setBus(bus);
         reservaRepository.save(reserva);
@@ -125,7 +125,7 @@ public class ReservaServiceImpl implements ReservaService {
     @Override
     public List<Reserva> findByCiudadDestinoAndFechaReservaAndHoraReserva(String ciudad, Date fecha, Float hora) throws NotFoundException {
         Bus bus = busRepository
-                .findByCiudadDestinoAndFechaReservaAndHoraReserva(ciudad, fecha, hora)
+                .findByCiudadDestinoIgnoreCaseAndFechaReservaAndHoraReserva(ciudad, fecha, hora)
                 .orElseThrow(() -> new NotFoundException("No se ha encontrado un autobus con estos requisitos."));
         return bus.getReservas();
     }

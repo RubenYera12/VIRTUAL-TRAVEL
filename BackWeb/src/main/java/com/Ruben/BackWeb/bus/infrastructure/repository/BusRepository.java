@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface BusRepository extends JpaRepository<Bus, String> {
-    Optional<Bus> findByCiudadDestinoAndFechaReservaAndHoraReserva(String ciudadDestino, Date fechaReserva, Float horaReserva);
+    Optional<Bus> findByCiudadDestinoIgnoreCaseAndFechaReservaAndHoraReserva(String ciudadDestino, Date fechaReserva, Float horaReserva);
 }

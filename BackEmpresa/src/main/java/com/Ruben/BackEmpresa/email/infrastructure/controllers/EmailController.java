@@ -33,7 +33,7 @@ public class EmailController {
         return ResponseEntity.ok(outputEmailDTOList);
     }
 
-    @GetMapping("getCorreos")
+    @GetMapping("Byintervalos")
     public ResponseEntity<List<OutputEmailDTO>> getCorreos(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaInferior,
                                            @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaSuperior, @RequestParam(defaultValue = "%") String ciudadDestino, @RequestParam(defaultValue = "00") @NumberFormat(pattern = "99") Float horaInferior,
                                            @RequestParam(defaultValue = "24") @NumberFormat(pattern = "99") Float horaSuperior) {
