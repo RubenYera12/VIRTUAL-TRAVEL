@@ -44,7 +44,7 @@ Un total de 10, donde tendremos las 3 bases de datos en MySQL, kafka + zookeeper
 
 Una vez levantados los diferentes contenedores podremos probar la aplicación. Para ello, he adjuntado una colección de postman con los endpoints implementados, que voy a explicar a continuación.
 
-###BackEmpresa
+### BackEmpresa
 
 - (GET) localhost:8080/login Devolverá un token
 
@@ -93,7 +93,7 @@ Para estos endpoints habrá que indicar el token generado por el login.
 
   - (GET) localhost:8080/api/v0/correos/Byintervalos?fechaInferior=2022-05-27&fechaSuperior=2022-05-29 Devolverá todos los correos mandados a las reservas de un autobus
 
-###BackWeb
+### BackWeb
 Para estos endpoints no será necesario indicar un token
 - Bus
 
