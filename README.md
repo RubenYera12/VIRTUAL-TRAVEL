@@ -18,8 +18,11 @@ Contará con dos tipos de back: BackEmpresa y BackWeb
 
 ## Tecnologías usadas:
 [![N|Solid](./img/spring-boot-logo.png)](https://spring.io) Para la lógica de la aplicación.
+
 [![N|Solid](./img/kafka-logo.png)](https://spring.io) Comunicará de forma asíncrona los diferentes Backs de la aplicación.
+
 [![N|Solid](./img/eureka-logo.png)](https://spring.io/projects/spring-cloud-netflix)  Que Balanceará la carga para distribuir las peticiones entre los diferentes BackWebs.
+
 [![N|Solid](./img/docker-logo.png)](https://www.docker.com) Exportar la aplicación y gestionar todos los servicios de cara al exterior.
 
 ## Servicios:
