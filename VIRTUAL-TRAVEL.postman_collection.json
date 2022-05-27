@@ -1,0 +1,811 @@
+{
+	"info": {
+		"_postman_id": "74d80118-d9c8-4a76-9af9-a6ba60e0f741",
+		"name": "VIRTUAL-TRAVEL",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20371125"
+	},
+	"item": [
+		{
+			"name": "BackEmpresa",
+			"item": [
+				{
+					"name": "Bus",
+					"item": [
+						{
+							"name": "CREATE",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoicnViZW5AZ21haWwuY29tIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE2NTM1NzgyOTQsImV4cCI6MTY1MzU3ODg5NH0.sbaswzahoSsYPrsfla_t22ZTqCYhV-S2LY0uFyBR3YtGOKmOoCjOA55T7XfpUV5x3dDIpH9zkba26akH38asdg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"ciudadDestino\":\"Valencia\",\r\n    \"fechaReserva\":\"2022-05-27\",\r\n    \"horaReserva\":12.00\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/api/v0/Bus",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v0",
+										"Bus"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Find ID",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoicnViZW5AZ21haWwuY29tIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE2NTMyOTk5MzEsImV4cCI6MTY1MzMwMDUzMX0.pHpTUJupI2DTQ0BdCsZlvURJ_KZoYSN09pZ5NHRFhXO-eRIIGxW1CzrbeQVtwdnBPqpJqADv9myFPqqTvKUo8Q",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v0/Bus/BUS0001",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v0",
+										"Bus",
+										"BUS0001"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Find All",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoicnViZW5AZ21haWwuY29tIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE2NTM0NzQ0NTIsImV4cCI6MTY1MzQ3NTA1Mn0.6_XDJNZKE7k1_YVdJdxcye2_LewFciY6yyAbHhvoG3j1Esi_b_QcuTuOSupY7gIS0fbZ-i-IRedJHJdPRCa2Lg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v0/Bus",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v0",
+										"Bus"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DELETE",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoicnViZW5AZ21haWwuY29tIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE2NTM1NzgyOTQsImV4cCI6MTY1MzU3ODg5NH0.sbaswzahoSsYPrsfla_t22ZTqCYhV-S2LY0uFyBR3YtGOKmOoCjOA55T7XfpUV5x3dDIpH9zkba26akH38asdg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v0/Bus/BUS0001",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v0",
+										"Bus",
+										"BUS0001"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Activar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoicnViZW5AZ21haWwuY29tIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE2NTM1NjYyMDQsImV4cCI6MTY1MzU2NjgwNH0.ziKlz7xLcNqOBG36cYvHAcvmFXLiEOj76LF3caR6qvi1fwDbIpj8yQJ3tLx6hXxLb3JY1FaaWm_C6SqXv75XOg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v0/Bus/activar?dia=2022-05-27&hora=12.00&destino=Madrid",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v0",
+										"Bus",
+										"activar"
+									],
+									"query": [
+										{
+											"key": "dia",
+											"value": "2022-05-27"
+										},
+										{
+											"key": "hora",
+											"value": "12.00"
+										},
+										{
+											"key": "destino",
+											"value": "Madrid"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Reserva",
+					"item": [
+						{
+							"name": "Reservar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoicnViZW5AZ21haWwuY29tIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE2NTM1NjM1NzgsImV4cCI6MTY1MzU2NDE3OH0.7oRhsFw2p6WjAXJC3POXmdSztuPD8qrPMy9QaNi92ljCLxLXdCDOeM4KjdgGOiIWTP2R_rTNjnhIn0m2mb1LZw",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "\r\n{\r\n    \"ciudadDestino\":\"Madrid\",\r\n    \"nombre\":\"Pepe\",\r\n    \"apellido\":\"Lopez\",\r\n    \"telefono\":\"695629168\",\r\n    \"correo\":\"rubenmaria@bosonit.com\",\r\n    \"fechaReserva\":\"2022-05-27\",\r\n    \"horaReserva\":\"12.00\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/api/v0/Reserva",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v0",
+										"Reserva"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Find All",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoicnViZW5AZ21haWwuY29tIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE2NTM1NTg2MzIsImV4cCI6MTY1MzU1OTIzMn0.xyWgn_rEIRZzY7nXZhVb7OPqZuBNPTGea618K55swGhjOiLQtbn3OSdSLZ6IyhBRLaFqVKbyPRXoQkgQnTRnMw",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v0/Reserva",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v0",
+										"Reserva"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Find ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v0/Reserva/RES0002",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v0",
+										"Reserva",
+										"RES0002"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Find Reserva By City Date Hour",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v0/Reserva/ByDiaHoraDestino?dia=2022-05-26&hora=12.00&destino=Madrid",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v0",
+										"Reserva",
+										"ByDiaHoraDestino"
+									],
+									"query": [
+										{
+											"key": "dia",
+											"value": "2022-05-26"
+										},
+										{
+											"key": "hora",
+											"value": "12.00"
+										},
+										{
+											"key": "destino",
+											"value": "Madrid"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get NumPlazas by City Date Hour",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v0/Reserva/NumPlazasByDiaHoraDestino?dia=2022-05-12&hora=17.00&destino=Madrid",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v0",
+										"Reserva",
+										"NumPlazasByDiaHoraDestino"
+									],
+									"query": [
+										{
+											"key": "dia",
+											"value": "2022-05-12"
+										},
+										{
+											"key": "hora",
+											"value": "17.00"
+										},
+										{
+											"key": "destino",
+											"value": "Madrid"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cancel Trip",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoicnViZW5AZ21haWwuY29tIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE2NTM1NjYyMDQsImV4cCI6MTY1MzU2NjgwNH0.ziKlz7xLcNqOBG36cYvHAcvmFXLiEOj76LF3caR6qvi1fwDbIpj8yQJ3tLx6hXxLb3JY1FaaWm_C6SqXv75XOg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v0/Reserva/cancel/Trip?dia=2022-05-27&hora=12.0&destino=Madrid",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v0",
+										"Reserva",
+										"cancel",
+										"Trip"
+									],
+									"query": [
+										{
+											"key": "dia",
+											"value": "2022-05-27"
+										},
+										{
+											"key": "hora",
+											"value": "12.0"
+										},
+										{
+											"key": "destino",
+											"value": "Madrid"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cancel Reserva",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v0/Reserva/cancel/RES0001",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v0",
+										"Reserva",
+										"cancel",
+										"RES0001"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v0/Reserva/RES0001",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v0",
+										"Reserva",
+										"RES0001"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Email",
+					"item": [
+						{
+							"name": "Get By Email",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoicnViZW5AZ21haWwuY29tIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE2NTM1NjM1NzgsImV4cCI6MTY1MzU2NDE3OH0.7oRhsFw2p6WjAXJC3POXmdSztuPD8qrPMy9QaNi92ljCLxLXdCDOeM4KjdgGOiIWTP2R_rTNjnhIn0m2mb1LZw",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v0/correos/sentTo?correo=rubenmaria.yera@bosonit.com",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v0",
+										"correos",
+										"sentTo"
+									],
+									"query": [
+										{
+											"key": "correo",
+											"value": "rubenmaria.yera@bosonit.com"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Correos",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoicnViZW5AZ21haWwuY29tIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE2NTM1NjM1NzgsImV4cCI6MTY1MzU2NDE3OH0.7oRhsFw2p6WjAXJC3POXmdSztuPD8qrPMy9QaNi92ljCLxLXdCDOeM4KjdgGOiIWTP2R_rTNjnhIn0m2mb1LZw",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v0/correos/Byintervalos?fechaInferior=2022-05-27&fechaSuperior=2022-05-29",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v0",
+										"correos",
+										"Byintervalos"
+									],
+									"query": [
+										{
+											"key": "ciudadDestino",
+											"value": "Madrid",
+											"disabled": true
+										},
+										{
+											"key": "horaInferior",
+											"value": "00",
+											"disabled": true
+										},
+										{
+											"key": "horaSuperior",
+											"value": "24",
+											"disabled": true
+										},
+										{
+											"key": "fechaInferior",
+											"value": "2022-05-27"
+										},
+										{
+											"key": "fechaSuperior",
+											"value": "2022-05-29"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "LOGIN",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "correo",
+								"value": "ruben@gmail.com",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "Ruben123",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:8080/login",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "BackWeb",
+			"item": [
+				{
+					"name": "Bus",
+					"item": [
+						{
+							"name": "Find ID",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoicnViZW5AZ21haWwuY29tIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE2NTMyOTk5MzEsImV4cCI6MTY1MzMwMDUzMX0.pHpTUJupI2DTQ0BdCsZlvURJ_KZoYSN09pZ5NHRFhXO-eRIIGxW1CzrbeQVtwdnBPqpJqADv9myFPqqTvKUo8Q",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8083/api/v0/Bus/findById/BUS0001",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v0",
+										"Bus",
+										"findById",
+										"BUS0001"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Find All",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoicnViZW5AZ21haWwuY29tIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE2NTM0NzQ0NTIsImV4cCI6MTY1MzQ3NTA1Mn0.6_XDJNZKE7k1_YVdJdxcye2_LewFciY6yyAbHhvoG3j1Esi_b_QcuTuOSupY7gIS0fbZ-i-IRedJHJdPRCa2Lg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8083/api/v0/Bus/findAll",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v0",
+										"Bus",
+										"findAll"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Reserva",
+					"item": [
+						{
+							"name": "CREATE",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "localhost:8083/api/v0/Bus",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v0",
+										"Bus"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Find All",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8083/api/v0/Reserva/findAll",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v0",
+										"Reserva",
+										"findAll"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Find ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8083/api/Empresa/Reserva/findById/RES0002",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"Empresa",
+										"Reserva",
+										"findById",
+										"RES0002"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Find Reserva By City Date Hour",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8083/api/v0/Reserva/findReservasByConditions?dia=2022-05-12&hora=17.00&destino=Madrid",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v0",
+										"Reserva",
+										"findReservasByConditions"
+									],
+									"query": [
+										{
+											"key": "dia",
+											"value": "2022-05-12"
+										},
+										{
+											"key": "hora",
+											"value": "17.00"
+										},
+										{
+											"key": "destino",
+											"value": "Madrid"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get NumPlazas by City Date Hour",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8083/api/v0/Reserva/getNumPlazasByConditions?dia=2022-05-12&hora=17.00&destino=Madrid",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v0",
+										"Reserva",
+										"getNumPlazasByConditions"
+									],
+									"query": [
+										{
+											"key": "dia",
+											"value": "2022-05-12"
+										},
+										{
+											"key": "hora",
+											"value": "17.00"
+										},
+										{
+											"key": "destino",
+											"value": "Madrid"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cancel Reserva",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "localhost:8083/api/v0/Reserva/cancel/Reserva/RES0001",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v0",
+										"Reserva",
+										"cancel",
+										"Reserva",
+										"RES0001"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
